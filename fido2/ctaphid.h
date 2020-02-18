@@ -30,8 +30,10 @@
 #define CTAPHID_GETRNG          (TYPE_INIT | 0x60)
 #define CTAPHID_GETVERSION      (TYPE_INIT | 0x61)
 #define CTAPHID_LOADKEY         (TYPE_INIT | 0x62)
+#define CTAPHID_SQRL_CMD        (TYPE_INIT | 0x63)
 // reserved for debug, not implemented except for HACKER and DEBUG_LEVEl > 0
 #define CTAPHID_PROBE           (TYPE_INIT | 0x70)
+// Used to sneak in SQRL support
 
     #define ERR_INVALID_CMD         0x01
     #define ERR_INVALID_PAR         0x02

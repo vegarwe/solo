@@ -701,6 +701,27 @@ uint8_t ctaphid_handle_packet(uint8_t * pkt_raw)
 
 }
 
+int handle_sqrl_command(int len, uint8_t * sqrl_cmd)
+{
+    size_t retlen = 0;
+
+    //printf("cmd %s\r\n", sqrl_cmd);
+
+    ctap_buffer[retlen++] = 'I';
+    ctap_buffer[retlen++] = ' ';
+    ctap_buffer[retlen++] = 'l';
+    ctap_buffer[retlen++] = 'i';
+    ctap_buffer[retlen++] = 'k';
+    ctap_buffer[retlen++] = 'e';
+    ctap_buffer[retlen++] = ' ';
+    ctap_buffer[retlen++] = 'y';
+    ctap_buffer[retlen++] = 'o';
+    ctap_buffer[retlen++] = 'u';
+    ctap_buffer[retlen++] = '\0';
+
+    return retlen;
+}
+
 uint8_t ctaphid_custom_command(int len, CTAP_RESPONSE * ctap_resp, CTAPHID_WRITE_BUFFER * wb)
 {
     ctap_response_init(ctap_resp);
@@ -751,6 +772,7 @@ uint8_t ctaphid_custom_command(int len, CTAP_RESPONSE * ctap_resp, CTAPHID_WRITE
 
         case CTAPHID_GETVERSION:
             printf1(TAG_HID,"CTAPHID_GETVERSION\n");
+            printf("fisken CTAPHID_GETVERSION\n");
             wb->bcnt = 4;
             ctap_buffer[0] = SOLO_VERSION_MAJ;
             ctap_buffer[1] = SOLO_VERSION_MIN;
@@ -816,6 +838,16 @@ uint8_t ctaphid_custom_command(int len, CTAP_RESPONSE * ctap_resp, CTAPHID_WRITE
             return 1;
 #endif
 
+#if !defined(SQRL_SUPPORT)
+        case CTAPHID_SQRL_CMD:
+            printf1(TAG_HID,"CTAPHID_SQRL_CMD\n");
+            //u2f_set_writeback_buffer(ctap_resp);
+            wb->bcnt = handle_sqrl_command(len, ctap_buffer);
+            //printf("%d '%s'\r\n", wb->bcnt, ctap_buffer);
+            ctaphid_write(wb, ctap_buffer, wb->bcnt);
+            ctaphid_write(wb, NULL, 0);
+            return 1;
+#endif
 
         }
 
