@@ -701,6 +701,7 @@ uint8_t ctaphid_handle_packet(uint8_t * pkt_raw)
 
 }
 
+#if !defined(SQRL_SUPPORT)
 int handle_sqrl_command(int len, uint8_t * sqrl_cmd)
 {
     size_t retlen = 0;
@@ -721,6 +722,7 @@ int handle_sqrl_command(int len, uint8_t * sqrl_cmd)
 
     return retlen;
 }
+#endif
 
 uint8_t ctaphid_custom_command(int len, CTAP_RESPONSE * ctap_resp, CTAPHID_WRITE_BUFFER * wb)
 {
